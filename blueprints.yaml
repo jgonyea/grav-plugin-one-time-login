@@ -1,0 +1,30 @@
+name: One Time Login
+version: 0.1.0
+description: Generates a one-time login URL for an existing user.
+icon: key
+author:
+  name: Jeremy Gonyea
+  email: jeremy.gonyea@gmail.com
+homepage: https://github.com/jgonyea/grav-plugin-one-time-login
+keywords: grav, user, login
+bugs: https://github.com/jgonyea/grav-plugin-one-time-login/issues
+docs: https://github.com/jgonyea/grav-plugin-one-time-login/blob/develop/README.md
+license: MIT
+
+dependencies:
+  - admin
+  - login
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: Plugin status
+      highlight: 1
+      default: 0
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
