@@ -92,7 +92,7 @@ class UserLoginCommand extends ConsoleCommand
         $user->save();
         
         // Display URL to CLI.
-        $url = 'Visit http://default/admin/otl/' . 'user' . $param_sep . $username . '/token' . $param_sep . $token . '/otl-nonce' . $param_sep . $nonce;
+        $url = 'Visit http://default/otl/' . 'user' . $param_sep . $username . '/otl_nonce' . $param_sep . $nonce;
         $this->output->writeln('This OTL URL will expire in one (1) hour');
         $this->output->writeln($url);
     }

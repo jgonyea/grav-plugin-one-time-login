@@ -1,2 +1,2 @@
 enabled: true
-text_var: Custom Text added by the **One Time Login** plugin (disable plugin to remove)
+otl_route: /otl

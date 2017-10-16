@@ -6,7 +6,7 @@ author:
   name: Jeremy Gonyea
   email: jeremy.gonyea@gmail.com
 homepage: https://github.com/jgonyea/grav-plugin-one-time-login
-keywords: grav, user, login
+keywords: grav, user, login, one-time, cli
 bugs: https://github.com/jgonyea/grav-plugin-one-time-login/issues
 docs: https://github.com/jgonyea/grav-plugin-one-time-login/blob/develop/README.md
 license: MIT
@@ -28,3 +28,8 @@ form:
         0: Disabled
       validate:
         type: bool
+    otl_route:
+        type: text
+        label: One-Time Login Route
+        default: /otl
+        validate.required: 1

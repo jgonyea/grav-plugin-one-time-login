@@ -1,0 +1,10 @@
+{% extends 'partials/base.html.twig' %}
+
+
+{% block content %}
+    {{ page.content }}
+    User: {{ (uri.param('user')) }}<br/>
+    Token: {{ (uri.param('token')) }}<br/>
+    Nonce:  {{ (uri.param('otl-nonce')) }}<br/>
+    
+{% endblock %}
