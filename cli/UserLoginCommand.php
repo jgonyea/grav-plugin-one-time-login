@@ -28,18 +28,17 @@ class UserLoginCommand extends ConsoleCommand
     
     
     /**
-     * Greets a person with or without yelling
+     * Generates a OTL for a specified existing user.
      */
     protected function configure()
     {
         $this
             ->setName("user-login")
             ->setAliases(['uli'])
-            ->setDescription("Greets a person.")
-            ->addOption(
+            ->setDescription("Generates a OTL for a specified existing user.")
+            ->addArgument(
                 'user',
-                'u',
-                InputOption::VALUE_REQUIRED,
+                InputArgument::OPTIONAL,
                 'The username'
             )
             ->setHelp('The <info>user-login</info> generates a one-time login URL for an existing user.')
@@ -51,14 +50,17 @@ class UserLoginCommand extends ConsoleCommand
      */
     protected function serve()
     {
-        //$param_sep = $this->grav['config']->get('system.param_sep', ':');
-        $param_sep = ":";
+        // Start session to generate a new token value each time.
+        session_start();
+        
+        $config = Grav::instance()['config'];
+        $param_sep = $config['system']['param_sep'];
+        
         // Collects the arguments and options as defined
         $this->options = [
-            'user'        => $this->input->getOption('user'),
+            'user' => $this->input->getArgument('user'),
         ];
-        
-        $this->validateOptions();
+
         $helper = $this->getHelper('question');
         $this->output->writeln('<green>Generating OTL URL</green>');
         $this->output->writeln('');
@@ -75,32 +77,26 @@ class UserLoginCommand extends ConsoleCommand
         }
         
         $token  = md5(uniqid(mt_rand(), true));
-        $expire = time() + 604800; // next week
+        $token_expire = time() + 3600; // one hour
         $nonce = Utils::getNonce('admin-form', false);
-       
+        
         
         // Load user object.
         $user = !empty($username) ? User::load($username) : null;
-        // Set reset token/ expiration.
-        $user->reset = $token . '::' . $expire;
-        // Save user object with reset values.
+        
+        // Set OTL nonce/ expiration.
+        $user->otl_nonce = $nonce;
+        $user->otl_nonce_expire = $token_expire;
+        
+        // Save user object with otl values.
         $user->save();
         
-        
-        $url = 'http://default/admin/reset/task' . $param_sep . 'reset/user' . $param_sep . $username . '/token' . $param_sep . $token . '/admin-nonce' . $param_sep . $nonce;
-        $this->output->writeln('This OTL URL will expire in two weeks:');
+        // Display URL to CLI.
+        $url = 'Visit http://default/admin/otl/' . 'user' . $param_sep . $username . '/token' . $param_sep . $token . '/otl-nonce' . $param_sep . $nonce;
+        $this->output->writeln('This OTL URL will expire in one (1) hour');
         $this->output->writeln($url);
     }
-    
-    /**
-     * Performs validation on each CLI command option.
-     */
-    protected function validateOptions()
-    {
-        foreach (array_filter($this->options) as $type => $value) {
-            $this->validate($type, $value);
-        }
-    }
+
     
     /**
      * @param        $type
