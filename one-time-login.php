@@ -10,6 +10,7 @@ use Grav\Common\User\User;
 use RocketTheme\Toolbox\Event\Event;
 use Grav\Plugin\AdminPlugin;
 use Grav\Plugin\Admin\AdminController;
+use RocketTheme\Toolbox\Session\Session;
 
 /**
  * Class OneTimeLoginPlugin
@@ -79,8 +80,6 @@ class OneTimeLoginPlugin extends Plugin
         $route = $this->config->get('plugins.one-time-login.otl_route');
         
         $uri = $this->grav['uri'];
-        $token = $uri->param('token');
-        $user = $uri->param('user');
 
          /** @var Pages $pages */
         $pages = $this->grav['pages'];
@@ -99,50 +98,46 @@ class OneTimeLoginPlugin extends Plugin
     /**
      * Authenticate user via uri and params.
      */
-    function authenticateOtl()
+    private function authenticateOtl()
     {
         $username = $this->grav['uri']->param('user');
-        
         $otl_nonce = $this->grav['uri']->param('otl_nonce');
         
-                
+        // Load user object.
         $user = !empty($username) ? User::load($username) : null;
-        if (empty($user) || !$user->otl_nonce){
-            $this->grav['debugger']->addMessage("No OTL Nonce");
+        if (empty($user) || !$user->otl_nonce) {
+            $this->grav['debugger']->addMessage("Missing OTL Nonce");
             return;
         }
-        if ($user){
+        if ($user) {
             $otl_nonce_expire = $user->otl_nonce_expire;
 
-            if (($user->otl_nonce == $otl_nonce) && (time() < $otl_nonce_expire)){
-                // Debug lines.  Remove for final release.
-                //unset($user->otl_nonce);
-                //unset($user->otl_nonce_expire);
-                //$user->save();
+            if (($user->otl_nonce == $otl_nonce) && (time() < $otl_nonce_expire)) {
+                // Remove OTL user entries.
+                unset($user->otl_nonce);
+                unset($user->otl_nonce_expire);
+                unset($user->otl_admin_logon);
+                $user->save();
+                
                 $user->authenticated = true;
                 $user->authorized = $user->authorize('admin.login');
-                
-                var_dump("JD");
-                var_dump($user->authorize('admin.login'));
-
-                // Login user to both website.
+                        
+                // Authenticate user to website.
                 $this->grav['session']->user = $user;
                 unset($this->grav['user']);
                 $this->grav['user'] = $user;
+                $this->redirect = "/";
                 
+                // Authenticate user to admin.
+                // todo: figure out how to also add admin cookie.
                 
-                // Login user to admin.
-                $this->data['username'] = strip_tags(strtolower($username));
-                
-                
-                
-                // Redirect to admin.
-                $grav_messages = $this->grav['messages'];
-                $grav_messages->add("You have used your one time link", 'info');
-                
-                //$this->grav->redirect('/');
+                // Set message about OTL expiration.
+            } else {
+                // todo: error message display.
             }
         }
-                
+        
+        // Redirect.
+        $this->grav->redirect($this->redirect);
     }
 }

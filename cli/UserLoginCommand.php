@@ -41,6 +41,13 @@ class UserLoginCommand extends ConsoleCommand
                 InputArgument::OPTIONAL,
                 'The username'
             )
+            ->addOption(
+                'admin',
+                'a',
+                InputOption::VALUE_NONE,
+                'Will also start an admin session with this user.  This will not grant additional rights beyond what the user already has.',
+                null
+            )
             ->setHelp('The <info>user-login</info> generates a one-time login URL for an existing user.')
         ;
     }
@@ -59,6 +66,7 @@ class UserLoginCommand extends ConsoleCommand
         // Collects the arguments and options as defined
         $this->options = [
             'user' => $this->input->getArgument('user'),
+            'admin' => $this->input->getOption('admin'),
         ];
 
         $helper = $this->getHelper('question');
@@ -80,19 +88,20 @@ class UserLoginCommand extends ConsoleCommand
         $token_expire = time() + 3600; // one hour
         $nonce = Utils::getNonce('admin-form', false);
         
-        
         // Load user object.
         $user = !empty($username) ? User::load($username) : null;
         
         // Set OTL nonce/ expiration.
         $user->otl_nonce = $nonce;
         $user->otl_nonce_expire = $token_expire;
+        $user->otl_admin_login = $this->options['admin'];
         
         // Save user object with otl values.
         $user->save();
         
         // Display URL to CLI.
-        $url = 'Visit http://default/otl/' . 'user' . $param_sep . $username . '/otl_nonce' . $param_sep . $nonce;
+        $base_uri = "http://default/otl/";
+        $url = $base_uri . 'user' . $param_sep . $username . '/otl_nonce' . $param_sep . $nonce;
         $this->output->writeln('This OTL URL will expire in one (1) hour');
         $this->output->writeln($url);
     }
