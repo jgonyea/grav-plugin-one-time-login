@@ -1,3 +1,15 @@
+# v0.1.5
+## 10/20/2017
+
+1. [](#new)
+    * CLI generated URL now authenticates as that user to the site instead of just presenting a password reset form.
+
+2. [](#improved)
+    * CLI options are better defined
+
+3. [](#bugfix)
+
+
 # v0.1.0
 ##  10/13/2017
 

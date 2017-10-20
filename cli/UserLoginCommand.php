@@ -62,6 +62,7 @@ class UserLoginCommand extends ConsoleCommand
         
         $config = Grav::instance()['config'];
         $param_sep = $config['system']['param_sep'];
+        $base_otl_url = $config['plugins']['one-time-login']['base_otl_utl'];
         
         // Collects the arguments and options as defined
         $this->options = [
@@ -85,7 +86,7 @@ class UserLoginCommand extends ConsoleCommand
         }
         
         $token  = md5(uniqid(mt_rand(), true));
-        $token_expire = time() + 3600; // one hour
+        $token_expire = time() + 900; // 15 minutes
         $nonce = Utils::getNonce('admin-form', false);
         
         // Load user object.
@@ -100,9 +101,9 @@ class UserLoginCommand extends ConsoleCommand
         $user->save();
         
         // Display URL to CLI.
-        $base_uri = "http://default/otl/";
+        $base_uri = $base_otl_url . $config->get('plugins.one-time-login.otl_route') . '/';
         $url = $base_uri . 'user' . $param_sep . $username . '/otl_nonce' . $param_sep . $nonce;
-        $this->output->writeln('This OTL URL will expire in one (1) hour');
+        $this->output->writeln('This OTL URL will expire in fifteen (15) minutes.');
         $this->output->writeln($url);
     }
 

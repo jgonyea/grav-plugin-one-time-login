@@ -102,12 +102,12 @@ class OneTimeLoginPlugin extends Plugin
     {
         $username = $this->grav['uri']->param('user');
         $otl_nonce = $this->grav['uri']->param('otl_nonce');
-        
+        $this->redirect = "/";
+
         // Load user object.
         $user = !empty($username) ? User::load($username) : null;
         if (empty($user) || !$user->otl_nonce) {
-            $this->grav['debugger']->addMessage("Missing OTL Nonce");
-            return;
+            $grav::instance()['log']->info("Improperly formed OTL url.");
         }
         if ($user) {
             $otl_nonce_expire = $user->otl_nonce_expire;
@@ -133,7 +133,7 @@ class OneTimeLoginPlugin extends Plugin
                 
                 // Set message about OTL expiration.
             } else {
-                // todo: error message display.
+                $grav::instance()['log']->info("Improperly formed OTL url.");
             }
         }
         

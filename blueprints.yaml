@@ -1,5 +1,5 @@
 name: One Time Login
-version: 0.1.0
+version: 0.1.5
 description: Generates a one-time login URL for an existing user.
 icon: key
 author:
@@ -28,6 +28,11 @@ form:
         0: Disabled
       validate:
         type: bool
+    base_otl_utl:
+        type: text
+        label: Base URL for OTL link
+        default: http://default
+        validate.required: 1
     otl_route:
         type: text
         label: One-Time Login Route

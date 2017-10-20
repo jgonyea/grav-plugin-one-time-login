@@ -1,6 +1,6 @@
 # One Time Login Plugin
 
-The **One Time Login** Plugin is for [Grav CMS](http://github.com/getgrav/grav). It generates a one-time login URL for an existing user to change their password.
+The **One Time Login** Plugin is for [Grav CMS](http://github.com/getgrav/grav). It generates a one-time login URL to automatically authenticate as an existing user.
 
 ## Installation
 
@@ -51,7 +51,7 @@ or
 `$ bin/plugin one-time-login uli [username]`
 
 
-Paste the URL into a browser to change that username's password.
+Paste the URL into a browser to authenticate as that user.
 
 
 ## Credits
@@ -60,4 +60,5 @@ Paste the URL into a browser to change that username's password.
 
 ## To Do
 
-- [ ] Have the URL fully authenticate, not just change passwords.
+- [ ] Have the URL fully authenticate to both site and admin logins, not just the site.
+- [ ] Better theme for otl.html.twig.
