@@ -40,6 +40,16 @@ enabled: true
 _Defaults plugin to **enabled** after installation_
 
 
+```yaml
+otl_route: /otl
+```
+_Defines initial page where otl authentication will occur_
+
+```yaml
+base_otl_utl: http://default
+```
+_Defines base for the OTL link generation.  Customize based on your environment._
+
 ## Usage
 
 From the commandline, you can generate one-time login URL's.
@@ -54,11 +64,6 @@ or
 Paste the URL into a browser to authenticate as that user.
 
 
-## Credits
-
-
-
 ## To Do
 
 - [ ] Have the URL fully authenticate to both site and admin logins, not just the site.
-- [ ] Better theme for otl.html.twig.
