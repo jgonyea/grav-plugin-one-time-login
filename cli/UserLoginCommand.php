@@ -41,13 +41,6 @@ class UserLoginCommand extends ConsoleCommand
                 InputArgument::OPTIONAL,
                 'The username'
             )
-            ->addOption(
-                'admin',
-                'a',
-                InputOption::VALUE_NONE,
-                'Will also start an admin session with this user.  This will not grant additional rights beyond what the user already has.',
-                null
-            )
             ->setHelp('The <info>user-login</info> generates a one-time login URL for an existing user.')
         ;
     }
@@ -66,7 +59,6 @@ class UserLoginCommand extends ConsoleCommand
         // Collects the arguments and options as defined
         $this->options = [
             'user' => $this->input->getArgument('user'),
-            'admin' => $this->input->getOption('admin'),
         ];
 
         $helper = $this->getHelper('question');
@@ -77,11 +69,12 @@ class UserLoginCommand extends ConsoleCommand
             // Get username and validate.
             $question = new Question('Enter a <yellow>username</yellow>: ');
             $question->setValidator(function ($value) {
-                return $this->validate('user', $value);
+                return $this->validateUser('user', $value);
             });
             $username = $helper->ask($this->input, $this->output, $question);
         } else {
             $username = $this->options['user'];
+            $valid_user = $this->validateUser('user', $username);
         }
         
         $token  = md5(uniqid(mt_rand(), true));
@@ -94,7 +87,6 @@ class UserLoginCommand extends ConsoleCommand
         // Set OTL nonce/ expiration.
         $user->otl_nonce = $nonce;
         $user->otl_nonce_expire = $token_expire;
-        $user->otl_admin_login = $this->options['admin'];
         
         // Save user object with otl values.
         $user->save();
@@ -114,12 +106,9 @@ class UserLoginCommand extends ConsoleCommand
      *
      * @return mixed
      */
-    protected function validate($type, $value, $extra = '')
+    protected function validateUser($type, $value, $extra = '')
     {
-        /** @var Config $config */
         $config = Grav::instance()['config'];
-
-        /** @var UniformResourceLocator $locator */
         $locator = Grav::instance()['locator'];
         switch ($type) {
             case 'user':

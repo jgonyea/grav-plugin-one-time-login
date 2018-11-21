@@ -46,7 +46,6 @@ class OneTimeLoginPlugin extends Plugin
         if ($this->isAdmin()) {
             return;
         }
-        /** @var Uri $uri */
         $uri = $this->grav['uri'];
         
         $path = $uri->path();
@@ -80,8 +79,6 @@ class OneTimeLoginPlugin extends Plugin
         $route = $this->config->get('plugins.one-time-login.otl_route');
         
         $uri = $this->grav['uri'];
-
-         /** @var Pages $pages */
         $pages = $this->grav['pages'];
         $page = $pages->dispatch($route);
 
@@ -107,7 +104,8 @@ class OneTimeLoginPlugin extends Plugin
         // Load user object.
         $user = !empty($username) ? User::load($username) : null;
         if (empty($user) || !$user->otl_nonce) {
-            $grav::instance()['log']->info("Improperly formed OTL url.");
+            $this->grav['log']->info("Invalid OTL URL.");
+            $this->grav['messages']->add('Invalid OTL URL.', 'error');
         }
         if ($user) {
             $otl_nonce_expire = $user->otl_nonce_expire;
@@ -127,16 +125,11 @@ class OneTimeLoginPlugin extends Plugin
                 unset($this->grav['user']);
                 $this->grav['user'] = $user;
                 $this->redirect = "/";
-                
-                // Authenticate user to admin.
-                // todo: figure out how to also add admin cookie.
-                
-                // Set message about OTL expiration.
             } else {
-                $grav::instance()['log']->info("Improperly formed OTL url.");
+                $this->grav['messages']->add('Invalid OTL URL.', 'error');
+                $this->grav['log']->info("Invalid OTL URL.");
             }
         }
-        
         // Redirect.
         $this->grav->redirect($this->redirect);
     }

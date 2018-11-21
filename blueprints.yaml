@@ -1,5 +1,5 @@
 name: One Time Login
-version: 0.1.5
+version: 0.1.6
 description: Generates a one-time login URL for an existing user.
 icon: key
 author:
@@ -22,7 +22,7 @@ form:
       type: toggle
       label: Plugin status
       highlight: 1
-      default: 0
+      default: 1
       options:
         1: Enabled
         0: Disabled
