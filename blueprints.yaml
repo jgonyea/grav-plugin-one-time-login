@@ -1,5 +1,5 @@
 name: One Time Login
-version: 0.2.0
+version: 0.2.1
 description: Generates a one-time login URL for an existing user.
 icon: key
 author:

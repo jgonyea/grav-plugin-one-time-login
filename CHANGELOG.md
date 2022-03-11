@@ -1,3 +1,10 @@
+# v0.2.1
+## 03/11/2022
+
+1. [](#new)
+2. [](#improved)
+3. [](#bugfix)
+    * Fixed documentation.  Disabling split session no longer required.
 # v0.2.0
 ## 03/11/2022
 

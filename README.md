@@ -60,9 +60,7 @@ Paste the URL into a browser to authenticate as that user.
 
 ## Note
 
-1. If you wish to use the OTL with the admin plugin, you'll need to change the split cookie from `true` to `false` inside the `user/config/system.yaml` file.  Otherwise, this otl url will only authenticate to the front-facing site and not admin.
-2. Using an OTL url will bypass 2FA.
+Using an OTL url will bypass any configured 2FA.
 
 ## To do
-
-* Add a notice about OTL time expirations.
+Nothing currently.
