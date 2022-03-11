@@ -1,5 +1,5 @@
 name: One Time Login
-version: 0.1.6
+version: 0.2.0
 description: Generates a one-time login URL for an existing user.
 icon: key
 author:
@@ -35,6 +35,9 @@ form:
         validate.required: 1
     otl_route:
         type: text
-        label: One-Time Login Route
-        default: /otl
-        validate.required: 1
+        label: One-Time-Login Route
+        default: /admin/otl
+        validate:
+          required: 1
+          pattern: "/admin/[a-z]{2,}"
+          message: Route must start with '/admin/' followed by your custom route.

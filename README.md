@@ -41,7 +41,7 @@ _Defaults plugin to **enabled** after installation_
 
 
 ```yaml
-otl_route: /otl
+otl_route: /admin/otl
 ```
 _Defines initial page where otl authentication will occur_
 
@@ -55,10 +55,6 @@ _Defines base for the OTL link generation.  Customize based on your environment.
 From the commandline, you can generate one-time login URL's.
 
 `$ bin/plugin one-time-login user-login [username]`
-
-or
-
-`$ bin/plugin one-time-login uli [username]`
 
 Paste the URL into a browser to authenticate as that user.
 

@@ -20,13 +20,12 @@ use Symfony\Component\Console\Question\Question;
  */
 class UserLoginCommand extends ConsoleCommand
 {
-   
+
     /**
      * @var array
      */
     protected $options = [];
-    
-    
+
     /**
      * Generates a OTL for a specified existing user.
      */
@@ -52,10 +51,10 @@ class UserLoginCommand extends ConsoleCommand
     {
         // Start session to generate a new token value each time.
         session_start();
-        
-        $config = Grav::instance()['config'];
+        $grav = Grav::instance();
+        $config = $grav['config'];
         $param_sep = $config['system']['param_sep'];
-        
+
         // Collects the arguments and options as defined
         $this->options = [
             'user' => $this->input->getArgument('user'),
@@ -76,21 +75,22 @@ class UserLoginCommand extends ConsoleCommand
             $username = $this->options['user'];
             $valid_user = $this->validateUser('user', $username);
         }
-        
+
         $token  = md5(uniqid(mt_rand(), true));
         $token_expire = time() + 900; // 15 minutes
         $nonce = Utils::getNonce('admin-form', false);
-        
+
         // Load user object.
-        $user = !empty($username) ? User::load($username) : null;
-        
+        $user = !empty($username) ? $grav['accounts']->load($username) : null;
+
         // Set OTL nonce/ expiration.
-        $user->otl_nonce = $nonce;
-        $user->otl_nonce_expire = $token_expire;
-        
+        $otl['nonce'] = $nonce;
+        $otl['nonce_expire'] = $token_expire;
+        $user->one_time_login = $otl;
+
         // Save user object with otl values.
         $user->save();
-        
+
         // Display URL to CLI.
         $base_uri = $config->get('plugins.one-time-login.base_otl_utl') . $config->get('plugins.one-time-login.otl_route') . '/';
         $url = $base_uri . 'user' . $param_sep . $username . '/otl_nonce' . $param_sep . $nonce;
@@ -98,7 +98,6 @@ class UserLoginCommand extends ConsoleCommand
         $this->output->writeln($url);
     }
 
-    
     /**
      * @param        $type
      * @param        $value

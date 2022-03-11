@@ -1,3 +1,13 @@
+# v0.2.0
+## 03/11/2022
+
+1. [](#new)
+    * Changed otl_route default to '/admin/otl' to address split-session system configurations.
+2. [](#improved)
+    * Redirects and notifications optimized.
+    * User-side validation of the otl_route.
+3. [](#bugfix)
+
 # v0.1.6
 ## 11/20/2018
 
