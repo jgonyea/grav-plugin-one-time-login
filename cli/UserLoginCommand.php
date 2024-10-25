@@ -7,6 +7,7 @@ use Grav\Common\File\CompiledYamlFile;
 use Grav\Common\User\User;
 use Grav\Common\Utils;
 use Grav\Common\Grav;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Helper\Helper;
@@ -96,6 +97,8 @@ class UserLoginCommand extends ConsoleCommand
         $url = $base_uri . 'user' . $param_sep . $username . '/otl_nonce' . $param_sep . $nonce;
         $this->output->writeln('This OTL URL will expire in fifteen (15) minutes.');
         $this->output->writeln($url);
+        
+        return ConsoleCommand::SUCCESS;
     }
 
     /**
