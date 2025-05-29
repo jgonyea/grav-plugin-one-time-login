@@ -97,8 +97,10 @@ class UserLoginCommand extends ConsoleCommand
         $url = $base_uri . 'user' . $param_sep . $username . '/otl_nonce' . $param_sep . $nonce;
         $this->output->writeln('This OTL URL will expire in fifteen (15) minutes.');
         $this->output->writeln($url);
-        
-        return ConsoleCommand::SUCCESS;
+
+        if (GRAV_VERSION >= 1.8){
+            return ConsoleCommand::SUCCESS;
+        }
     }
 
     /**
