@@ -1,10 +1,18 @@
+# v0.2.3
+## 05/29/2025
+
+1. [](#new)
+2. [](#improved)
+3. [](#bugfix)
+    * Regression fix for CLI command in Grav <1.8
+
 # v0.2.2
 ## 10/25/2024
 
 1. [](#new)
 2. [](#improved)
 3. [](#bugfix)
-    * Updated compatibilit for Grav 1.8-beta.
+    * Updated compatibility for Grav 1.8-beta.
 
 # v0.2.1
 ## 03/11/2022
