@@ -1,3 +1,12 @@
+# v0.2.4
+## 06/03/2025
+
+1. [](#new)
+2. [](#improved)
+    * Support for admin panels with custom routes.
+3. [](#bugfix)
+
+
 # v0.2.3
 ## 05/29/2025
 
