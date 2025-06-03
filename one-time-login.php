@@ -1,6 +1,7 @@
 <?php
 namespace Grav\Plugin;
 
+use Grav\Common\Grav;
 use Grav\Common\Plugin;
 use Grav\Common\Page\Page;
 
@@ -14,7 +15,13 @@ class OneTimeLoginPlugin extends Plugin
     /**
      * Custom route for the OTL page.
      */
-    protected $route;
+    protected $otl_route;
+
+    /**
+     * Admin route.
+     */
+    protected $admin_route;
+
     /**
      * @return array
      *
@@ -38,7 +45,8 @@ class OneTimeLoginPlugin extends Plugin
      */
     public function onPluginsInitialized()
     {
-        $this->route = $this->config->get('plugins.one-time-login.otl_route');
+        $this->otl_route = $this->config->get('plugins.one-time-login.otl_route');
+        $this->otl_route = $this->config->get('plugins.admin.route');
         if($this->isAdmin()){
             $this->notify_otl_route();
         }
@@ -46,7 +54,7 @@ class OneTimeLoginPlugin extends Plugin
         $path = $this->grav['uri']->path();
 
         // Don't proceed if we aren't at the OTL page.
-        if ($path !== $this->route) {
+        if ($path !== $this->otl_route) {
             return;
         }
 
@@ -93,7 +101,7 @@ class OneTimeLoginPlugin extends Plugin
     {
         $username = $this->grav['uri']->param('user');
         $otl_nonce = $this->grav['uri']->param('otl_nonce');
-        $this->redirect = "/";
+        $redirect = "/";
 
         // Load user object.
         $user = !empty($username) ? $this->grav['accounts']->load($username) : null;
@@ -121,7 +129,7 @@ class OneTimeLoginPlugin extends Plugin
                 $user->authorized = $user->authorize('admin.login') ?? false;
 
 
-                $this->redirect = "/admin/accounts/users/" . $username;
+                $redirect = "/admin/accounts/users/" . $username;
                 $this->grav['messages']->add('You have signed in with your one-time-login.  Please change your password.', 'notice');
                 $this->grav['messages']->add('Please change your password below.', 'info');
             } else {
@@ -130,7 +138,23 @@ class OneTimeLoginPlugin extends Plugin
             }
         }
         // Redirect.
-        $this->grav->redirect($this->redirect);
+        $this->grav->redirect($redirect);
+    }
+
+    /**
+     * Generates default route.
+     */
+    public static function generate_route():string {
+        $grav = Grav::instance();
+        $admin_route = $grav['config']['plugins']['admin']['route'];
+        return $admin_route . "/otl";
+    }
+
+    public static function validation_pattern():string {
+        $grav = Grav::instance();
+        $admin_route = $grav['config']['plugins']['admin']['route'];
+        $pattern = $admin_route . "/[a-z]{2,}";
+        return $pattern;
     }
 
     /**
@@ -139,7 +163,10 @@ class OneTimeLoginPlugin extends Plugin
      * @return void
      */
     private function notify_otl_route():void {
-        $route = explode("/", $this->route);
+        return;
+        $grav = Grav::instance();
+        $admin_route = $grav['config']['plugins']['admin']['route'];
+        $route = explode("/", $this->otl_route);
         if ($route[1] != 'admin') {
             $this->grav['messages']->add('<a href="/admin/plugins/one-time-login">Invalid OTL configuration for "One-Time-Login Route" (must start with "/admin").  Click here to fix</a>', 'error');
         }

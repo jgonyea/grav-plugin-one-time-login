@@ -36,8 +36,8 @@ form:
     otl_route:
         type: text
         label: One-Time-Login Route
-        default: /admin/otl
+        'data-default@': '\Grav\Plugin\OneTimeLoginPlugin::generate_route'
         validate:
           required: 1
-          pattern: "/admin/[a-z]{2,}"
           message: Route must start with '/admin/' followed by your custom route.
+          'data-pattern@': '\Grav\Plugin\OneTimeLoginPlugin::validation_pattern'
