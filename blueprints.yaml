@@ -1,6 +1,6 @@
 name: One Time Login
-version: 0.2.4
-description: Generates a one-time login URL for an existing user.
+version: 0.2.5
+description: Generates a one-time login URL via the CLI for an existing user.
 icon: key
 author:
   name: Jeremy Gonyea
@@ -39,5 +39,5 @@ form:
         'data-default@': '\Grav\Plugin\OneTimeLoginPlugin::generate_route'
         validate:
           required: 1
-          message: Route must start with '/admin/' followed by your custom route.
+          message: 'Route must start with your admin path, followed by your custom OTL route. (Example: `/admin/otl`)'
           'data-pattern@': '\Grav\Plugin\OneTimeLoginPlugin::validation_pattern'
