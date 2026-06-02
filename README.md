@@ -2,6 +2,10 @@
 
 The **One Time Login** Plugin is for [Grav CMS](http://github.com/getgrav/grav). It generates a one-time login URL to automatically authenticate as an existing user.
 
+![Limited Development](https://img.shields.io/badge/Limited%20Development-1000?style=for-the-badge&logo=PHP&logoColor=ffffff&labelColor=000000&color=000000)
+
+> At this time, the project will not be converted to support Grav v2.0
+
 ## Installation
 
 Installing the One Time Login plugin can be done in one of two ways. The GPM (Grav Package Manager) installation method enables you to quickly and easily install the plugin with a simple terminal command, while the manual method enables you to do so via a zip file.
